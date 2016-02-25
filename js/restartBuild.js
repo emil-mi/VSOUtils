@@ -651,13 +651,12 @@ var requirejs, require, define;
 
     require(['reqwest', 'es6-promise'], function (reqwest) {
         var QUERY_BUILD = '<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope"><s:Body><QueryBuildsByUri xmlns="http://schemas.microsoft.com/TeamFoundation/2010/Build"><uris>' +
-            '<string>vstfs:///Build/Build/${buildID}</string></uris><informationTypes><string>*</string></informationTypes><options>All</options></QueryBuildsByUri></s:Body></s:Envelope>',
-        RESTART_BUILD = '<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope"><s:Body><UpdateBuilds xmlns="http://schemas.microsoft.com/TeamFoundation/2010/Build"><updates>' +
-            '<QueuedBuildUpdateOptions Fields="BatchId Requeue" QueueId="${queueID}" RetryOption="CompletedBuild"/></updates></UpdateBuilds></s:Body></s:Envelope>';
+                '<string>vstfs:///Build/Build/${buildID}</string></uris><informationTypes><string>*</string></informationTypes><options>All</options></QueryBuildsByUri></s:Body></s:Envelope>',
+            RESTART_BUILD = '<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope"><s:Body><UpdateBuilds xmlns="http://schemas.microsoft.com/TeamFoundation/2010/Build"><updates>' +
+                '<QueuedBuildUpdateOptions Fields="BatchId Requeue" QueueId="${queueID}" RetryOption="CompletedBuild"/></updates></UpdateBuilds></s:Body></s:Envelope>';
 
-        function doRestart() {
-            var build = this.buildId,
-                requestBody = QUERY_BUILD.replace('${buildID}', build),
+        function doRestart(build) {
+            var requestBody = QUERY_BUILD.replace('${buildID}', build),
                 requestOptions = {
                     method: 'POST',
                     headers: {
@@ -671,10 +670,10 @@ var requirejs, require, define;
                 };
             return Promise.resolve(reqwest.compat(requestOptions))
                 .then(function (data) {
-                        return data.getElementsByTagName('QueueIds')[0].childNodes[0].textContent;
-                    })
-                .then(function(queueID){
-                    requestBody = RESTART_BUILD.replace('${queueID}', queueID),
+                    return data.getElementsByTagName('QueueIds')[0].childNodes[0].textContent;
+                })
+                .then(function (queueID) {
+                    var requestBody = RESTART_BUILD.replace('${queueID}', queueID),
                         requestOptions = {
                             method: 'POST',
                             headers: {
@@ -703,14 +702,15 @@ var requirejs, require, define;
             return result;
         }
 
-        doRestart.call({buildId: getQueryStringPairs(document.location.search).buildId})
-            .then(function(){
-            console.log('Build '+build+' restarted');
-            alert('Build '+build+' restarted');
-        })
-            .catch(function(){
-                console.log('Build '+build+' restart failed. You are on your own');
-                alert('Build '+build+' restart failed. You are on your own');
+        var buildId = getQueryStringPairs(document.location.search).buildId;
+        doRestart(buildId)
+            .then(function () {
+                console.log('Build ' + buildId + ' restarted');
+                alert('Build ' + buildId + ' restarted');
+            })
+            .catch(function () {
+                console.log('Build ' + buildId + ' restart failed. You are on your own');
+                alert('Build ' + buildId + ' restart failed. You are on your own');
             });
     });
 
