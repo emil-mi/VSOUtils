@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+    <head>
+        <title>SWX Local Tools Page</title>
+        <style>
+            body, html { height: 100%; margin: 0; overflow-y: hidden; }
+            #restartBuild input {
+                width: 25em;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>SWX Local Tools Page</h1>
+
+        <h2>How to use</h2>
+        <h3>First time setup</h3>
+        <ul>
+            <li>Add a host entry for dogfood-webclient.skype.com hitting 127.0.0.1 (hijacking dogfood to get past whitelisting issues).</li>
+            <li>Trust build/certificates/localhost/swx_dev_root.pfx (import the cert into your trusted roots in your OS certificate manager)</li>
+            <li>Run node static-server.js (with admin/sudo. If you have problems on windows, run 'net stop http').</li>
+            <li>Drag <a href="javascript: (s=document.createElement('script')) && (s.src='https://dogfood-webclient.skype.com/www/restartBuild.js') && (document.getElementsByTagName('head')[0].appendChild(s))">this</a> to your bookmarks bar</li>
+        </ul>
+
+        <section id="restartBuild">
+            <h1>Restart VSO build</h1>
+            <label>Enter VSO build number: <input data-bind="value: buildId" type="text" placeholder="e.g. SWX.Gated.CheckIn.20160224.97016"></label>
+            <button data-bind="click: doRestart">Restart build</button>
+        </section>
+
+    </div>
+    </body>
+
+    <script src="../vendor/require.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        var vendor = '../vendor';
+
+        requirejs.config({
+            baseUrl: '../js',
+            paths: {
+                'vendor': vendor,
+                'reqwest': vendor + '/reqwest'
+            }
+        });
+    }());
+    </script>
+</html>
