@@ -22,11 +22,14 @@
 
       <section id="restartBuild">
         <h3>Restart VSO build</h3>
-        <p>This is a bookmarklet that you can use to restart your build from the browser.<br>
-          Drag the link into your bookmark bar and then you can click on it when you have the failed build in your browser.</p>
+        <p>This is a bookmarklet that you can use to restart your build from the browser.</p>
+        <h4>Usage instructions</h4>
+        <p>Drag the link below into your bookmark bar.</p>
         <a href="javascript:(s=document.createElement('script')) && (s.src='https://emil-mi.github.io/VSOUtils/js/restartBuild.js') && (document.getElementsByTagName('head')[0].appendChild(s))">Restart build</a>
+        <p>Click on the bookmark when you have the failed build's page opened in your browser. 
+        This will restart any build even if it was not started by you, as long as you are authenticated</p>
+        <p>The bookmarklet is known to work on Chrome. Please fork and contribute!</p>
       </section>
-
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/emil-mi/VSOUtils">Vsoutils</a> is maintained by <a href="https://github.com/emil-mi">emil-mi</a>.</span>
